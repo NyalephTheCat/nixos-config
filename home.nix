@@ -21,13 +21,7 @@
           pkgs.vscode
           pkgs.clip
           pkgs.remmina
-          #pkgs.libreoffice-fresh
-          #pkgs.steamcmd
-          #pkgs.steam-tui
-          #pkgs.steam
-          #pkgs.vivaldi
-          #pkgs.vivaldi-ffmpeg-codecs
-
+          
           # Gnome
           pkgs.gnomeExtensions.dash-to-panel
           pkgs.gnomeExtensions.night-theme-switcher
