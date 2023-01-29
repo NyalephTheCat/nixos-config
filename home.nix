@@ -127,7 +127,7 @@
         enableFishIntegration = true;
       };
 
-      programs.git {
+      programs.git = {
         enable = true;
         programs.git.aliases = { 
           co = "checkout";
