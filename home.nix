@@ -117,9 +117,9 @@
         nshell = "nix-shell -p";
       };
 
-      programs.bash.enable = true;
-      programs.bash.initExtra = "source ${./bash/bashrc}";
-      programs.bash.shellAliases = programs.fish.shellAliases;
+      programs.bash.enable = false;
+      #programs.bash.initExtra = "source ${./bash/bashrc}";
+      #programs.bash.shellAliases = programs.fish.shellAliases;
 
       programs.bat.enable = true;
 
