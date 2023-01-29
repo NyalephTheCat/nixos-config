@@ -126,10 +126,10 @@
         enable = true;
         enableFishIntegration = true;
       };
-      
+
       programs.gh.enable = true;
       programs.gh.enableGitCredentialHelper = true;
-      programs.gh.extensions = with pkgs; [ gh-graph ];
+      programs.gh.extensions = with pkgs; [ ];
 
       programs.micro.enable = true;
       programs.htop.enable = isNotWSL;
@@ -209,5 +209,7 @@
         '';
       };
     };
+
+    security.sudo.enable = true;
 }
 
