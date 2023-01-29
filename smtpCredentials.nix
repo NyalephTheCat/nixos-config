@@ -1,3 +1,3 @@
 {
-  email = "perso@nyaleph.com"
+  email = "perso@nyaleph.com";
 }
