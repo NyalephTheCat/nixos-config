@@ -22,7 +22,7 @@ in
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.kernelPackages = nixpkgs.linuxPackages_5_15;
   boot.bootspec.enable = true;
-  networking.hostName = "hades";
+  networking.hostName = "nyxos";
   networking.networkmanager.enable = true;
 
   networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
