@@ -126,14 +126,7 @@
         enable = true;
         enableFishIntegration = true;
       };
-
-      programs.git = {
-        enable = true;
-        programs.git.aliases = { 
-          co = "checkout";
-        };
-      };
-
+      
       programs.gh.enable = true;
       programs.gh.enableGitCredentialHelper = true;
       programs.gh.extensions = with pkgs; [ gh-graph ];
