@@ -1,5 +1,5 @@
 {
-  description = "NixOS Configuration for Hades";
+  description = "NixOS Configuration for my machine";
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
@@ -10,14 +10,13 @@
     kittyNixpkgs.url = "github:NixOS/nixpkgs/c28f3f4bb3c1b7c723c1bf9e012704d89888aeff";
   };
   outputs = { nixpkgs, nixos-hardware, lanzaboote, hyprland, home-manager, ... }@inputs: {
-    nixosConfigurations."hades" = nixpkgs.lib.nixosSystem {
+    nixosConfigurations."nyxos" = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         hyprland.nixosModules.default
         lanzaboote.nixosModules.lanzaboote
         home-manager.nixosModules.home-manager
         nixos-hardware.nixosModules.lenovo-thinkpad-t470s
-        ./zfs.nix
         ./hardware-configuration.nix
         ./configuration.nix
         ./home.nix
