@@ -177,9 +177,6 @@ in
     persist = true;
   }];
 
-  services.udev.packages = [ nixpkgs.gnome.gnome-settings-daemon ];
-  services.udev.extraRules = builtins.readFile ./udev.txt;
-
   services.flatpak.enable = true;
   programs.steam.enable = true;
 }
