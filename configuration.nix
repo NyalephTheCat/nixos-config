@@ -35,7 +35,7 @@ in
 
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.videoDrivers = [ "displaylink" "modesetting" ];
+  services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
   services.xserver = {
     layout = "fr";
     xkbVariant = "";
@@ -84,13 +84,6 @@ in
       ];
     };
   };
-
-  services.zerotierone.enable = true;
-  services.zerotierone.joinNetworks = [
-    "159924d6302966a9" # Personnal network
-    "db64858fed84f14c" # EpiSec network
-    "a0cbf4b62acc13d7" # Aeden
-  ];
 
   users.users.root.initialPassword = "rootPassword";
 
@@ -151,23 +144,7 @@ in
     })
   ];
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
-
-  networking.firewall.checkReversePath = false;
-
   system.stateVersion = "22.05"; # Did you read the comment?
-
-  virtualisation.libvirtd.enable = true;
-
-  virtualisation.docker.enable = false;
-  virtualisation.podman.enable = true;
-  virtualisation.podman.dockerCompat = true;
-  virtualisation.podman.dockerSocket.enable = true;
-  # virtualisation.podman.defaultNetwork.dnsname.enable = true; # Deprecated on Unstable (and later 23.05)
-  # virtualisation.podman.defaultNetwork.settings.dns_enabled = true; # Starting from 23.05
-  virtualisation.podman.defaultNetwork = recApply (getAttrOrDefault nixOsVersion paths "default");
-  virtualisation.podman.extraPackages = [ pkgs.zfs ];
-  virtualisation.anbox.enable = true;
 
   security.doas.enable = true;
   security.sudo.enable = false;
