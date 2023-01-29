@@ -15,10 +15,13 @@
       plateformSpecificPackages =
         if (isNotWSL)
         then [
+          # Coding stuff
+          pkgs.vscode
+          pkgs.rustup
+
           # We are *not* in WSL
           pkgs.teams
           pkgs.discord
-          pkgs.vscode
           pkgs.clip
           pkgs.remmina
           
@@ -108,20 +111,42 @@
       programs.fish.shellAliases = {
         cls = "clear";
         cat = "bat";
+        diff = "batdiff";
+        man = "batman";
         nshell = "nix-shell -p";
+        "..." = "cd ../..";
       };
 
-      programs.bash.enable = false;
-      #programs.bash.initExtra = "source ${./bash/bashrc}";
-      #programs.bash.shellAliases = programs.fish.shellAliases;
+      programs.bat = { 
+        enable = true;
+        extraPackages = with pkgs.bat-extras; [ batdiff batman batgrep batwatch ];
+      };
 
-      programs.bat.enable = true;
+      programs.dircolors = {
+        enable = true;
+        enableFishIntegration = true;
+      };
+
+      programs.git {
+        enable = true;
+        programs.git.aliases = { 
+          co = "checkout";
+        };
+      };
 
       programs.gh.enable = true;
+      programs.gh.enableGitCredentialHelper = true;
+      programs.gh.extensions = with pkgs; [ gh-graph ];
+
       programs.micro.enable = true;
       programs.htop.enable = isNotWSL;
       programs.navi.enable = true;
       programs.tealdeer.enable = true;
+
+      programs.fzf = {
+        enable = true;
+        enableFishIntegration = true;
+      };
 
       programs.kitty.enable = true;
       programs.kitty.package = kitty;
@@ -130,14 +155,8 @@
       programs.nnn.package = pkgs.nnn.override ({ withNerdIcons = true; });
       programs.nnn.extraPackages = with pkgs; [ ffmpegthumbnailer mediainfo sxiv ];
 
-      programs.rbw = {
-        enable = isNotWSL;
-        settings = {
-          email = emailInfo.email;
-          lock_timeout = 300;
-          pinentry = "gnome3";
-          base_url = "https://vault.bitwarden.com";
-        };
+      programs.firefox = {
+        enable = true;
       };
 
       services.mpris-proxy.enable = isNotWSL;
@@ -146,7 +165,27 @@
         MOZ_WAYLAND =
           if (builtins.getEnv "XDG_SESSION_TYPE" == "wayland" && isNotWSL)
           then 1 else 0;
-        EDITOR = "micro";
+      };
+
+      home.shellAliases = {
+        g = "git";
+        "..." = "cd ../..";
+      };
+
+      programs.neovim = {
+        enable = true;
+        defaultEditor = true;
+        viAlias = true;
+        vimAlias = true;
+        plugins = with pkgs.vimPlugins; [
+          nvim-treesitter.withAllGrammars
+        ];
+        extraConfig = ''
+          set number
+          set cc = 80
+          set list = true
+          set listchars = tab:→\ ,space:·,nbsp:␣,trail:•,eol:¶,precedes:«,extends:»
+        '';
       };
 
       programs.git = {
@@ -168,6 +207,7 @@
         enable = true;
         homedir = "${config.xdg.configHome}/gnupg";
       };
+
       services.gpg-agent = {
         enable = true;
         pinentryFlavor = "gnome3";

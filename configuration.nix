@@ -36,13 +36,19 @@ in
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
   services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
+  hardware.nvidia = {
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    modesetting.enable = true;
+    open = true;
+  };
+  hardware.opengl.enable = true;
   services.xserver = {
-    layout = "fr";
+    layout = "us";
     xkbVariant = "";
   };
   programs.hyprland.enable = true;
 
-  console.keyMap = "fr";
+  console.keyMap = "us";
 
   services.printing.enable = true;
 
@@ -146,14 +152,5 @@ in
 
   system.stateVersion = "22.05"; # Did you read the comment?
 
-  security.doas.enable = true;
-  security.sudo.enable = false;
-  security.doas.extraRules = [{
-    users = [ "chloe" ];
-    keepEnv = true;
-    persist = true;
-  }];
-
-  services.flatpak.enable = true;
   programs.steam.enable = true;
 }
