@@ -27,7 +27,7 @@
         pkgs.lib.nixosSystem {
           system = system;
           modules = [
-            { networking.hostname = hostname; }
+            { networking.hostName = hostname; }
             lanzaboote.nixosModules.lanzaboote
             ./modules/system/configuration.nix
             # DO NOT USE MY HARDWARE CONFIG
