@@ -1,19 +1,6 @@
 local o = vim.opt
 local g = vim.g
 
--- Autocmds
-vim.cmd [[
-augroup CursorLine
-    au!
-    au VimEnter * setlocal cursorline
-    au WinEnter * setlocal cursorline
-    au BufWinEnter * setlocal cursorline
-    au WinLeave * setlocal nocursorline
-augroup END
-
-autocmd FileType nix setlocal shiftwidth=4
-]]
-
 -- Keybinds
 local map = vim.api.nvim_set_keymap
 local opts = { silent = true, noremap = true }
@@ -35,11 +22,21 @@ o.lazyredraw = true;
 o.shell = "zsh"
 o.shadafile = "NONE"
 
+-- Ignore compiled files
+o.wildignore = "__pycache__"
+o.wildignore:append { "*.o", "*~", "*.pyc", "*.pycache*" }
+o.wildignore:append "Cargo.lock"
+
 -- Colors
 o.termguicolors = true
 
 -- Undo files
 o.undofile = true
+
+-- Cool floating window popup menu for completion on command line
+o.pumblend = 17
+o.wildmode = "longest:full"
+o.wildoptions = "pum"
 
 -- Indentation
 o.smartindent = true
@@ -47,7 +44,7 @@ o.tabstop = 4
 o.shiftwidth = 4
 o.shiftround = true
 o.expandtab = true
-o.scrolloff = 3
+o.scrolloff = 10
 
 -- Set clipboard to use system clipboard
 o.clipboard = "unnamedplus"
@@ -81,3 +78,19 @@ o.splitright = true
 o.splitbelow = true
 o.completeopt = "menuone,noselect"
 
+-- Cursorline highlight control
+--  Only have it on the active buffer
+o.cursorline = true
+local group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+local set_cursorline = function(event, value, pattern)
+	vim.api.nvim_create_autocmd(event, {
+		group = group,
+		pattern = pattern,
+		callback = function()
+			vim.opt_local.cursorline = value
+		end,
+	})
+end
+set_cursorline("WinLeave", false)
+set_cursorline("WinEnter", true)
+set_cursorline("FileType", false, "TelescopePrompt")

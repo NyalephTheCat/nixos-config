@@ -1,4 +1,4 @@
-{  lib, config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 let
     cfg = config.modules.nvim;
@@ -41,7 +41,7 @@ in {
                 plenary-nvim
                 {
                     plugin = zk-nvim;
-                    config = "require('zk').setup()";
+                    config = "lua require('zk').setup()";
                 }
                 {
                     plugin = jabuti-nvim;

@@ -36,7 +36,6 @@ in {
             # `cd ~dots` will cd into ~/.config/nixos
             dirHashes = {
                 dots = "$HOME/.config/nixos";
-                home = "$HOME";
                 media = "/run/media/$USER";
                 junk = "$HOME/other";
             };
