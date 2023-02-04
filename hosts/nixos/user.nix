@@ -23,5 +23,8 @@
         # system
         xdg.enable = true;
         packages.enable = true;
-    };
+        
+        # Tools
+        rust.enable = true;
+      };
 }

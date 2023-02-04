@@ -23,5 +23,8 @@
         # system
         ./xdg
 	    ./packages
-    ];
+  
+        # Tools
+        ./rust
+  ];
 }
