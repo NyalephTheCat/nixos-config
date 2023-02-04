@@ -10,6 +10,7 @@
         ./dunst
         ./hyprland
         ./wofi
+        ./discord
 
         # cli
         ./nvim
