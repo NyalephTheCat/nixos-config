@@ -8,74 +8,85 @@
     packages = [ pkgs.firefox ];
   };
 
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+  };
+
   home-manager.users.chloe = { config, pkgs, ... }:
     let
       plateformSpecificPackages =
         if (isNotWSL)
-        then [
+        then with pkgs; [
           # Coding stuff
-          pkgs.vscode
-          pkgs.rustup
+          vscode
+          rustup
 
           # We are *not* in WSL
-          pkgs.teams
-          pkgs.discord
-          pkgs.clip
-          pkgs.remmina
+          teams
+          discord
+          clip
+          remmina
           
           # Gnome
-          pkgs.gnomeExtensions.dash-to-panel
-          pkgs.gnomeExtensions.night-theme-switcher
-          pkgs.gnomeExtensions.appindicator
+          gnomeExtensions.dash-to-panel
+          gnomeExtensions.night-theme-switcher
+          gnomeExtensions.appindicator
 
           # Hyprland
-          pkgs.libsForQt5.dolphin
-          pkgs.wofi
-          pkgs.waybar
+          libsForQt5.dolphin
+          wofi
+          waybar
         ]
-        else [
+        else with pkgs; [
           # We *are* in WSL
-          pkgs.wslu
+          wslu
         ];
 
-      commonPackages = [
-        pkgs.fish
-        pkgs.openssh
-        pkgs.file
-        pkgs.powershell
-        pkgs.rnix-lsp
-        pkgs.any-nix-shell
-        pkgs.unzip
-        pkgs.xclip
+      commonPackages = with pkgs; [
+        any-nix-shell
+        file
+        fish
+	home-manager
+	luajit
+	luajitPackages.luarocks
+	luajitPackages.luasocket
+	neofetch
+	nodePackages.pyright
+	nodePackages.typescript-language-server
+	nodePackages.vscode-html-languageserver-bin
+	nodePackages.vscode-json-languageserver
+	nodePackages.yaml-language-server
+        openssh
+        powershell
+        rnix-lsp
+	sqlite
+	stylua
+	sumneko-lua-language-server
+	texlab
+	tree
+	tree-sitter
+        unzip
+        xclip
       ];
-      #bwSecrets = builtins.import ./bw.nix;
       emailInfo = builtins.import ./smtpCredentials.nix;
     in
     rec {
-      # Home Manager needs a bit of information about you and the
-      # paths it should manage.
-      home.username = "chloe";
-      home.homeDirectory = "/home/chloe";
+      home = {
+	username = "chloe";
+	homeDirectory = "/home/chloe";
+        stateVersion = "22.11"; ######## /!\ DO NOT CHANGE THIS AS IT AVOIDS BREAKAGES
+      };
 
-      xdg.enable = true;
-      xdg.userDirs = {
+      xdg = {
         enable = true;
-        createDirectories = true;
+	userDirs = {
+          enable = true;
+          createDirectories = true;
+        };
       };
 
       nixpkgs.config.allowUnfree = true;
-
-      # This value determines the Home Manager release that your
-      # configuration is compatible with. This helps avoid breakage
-      # when a new Home Manager release introduces backwards
-      # incompatible changes.
-      #
-      # You can update Home Manager without changing this value. See
-      # the Home Manager release notes for a list of state version
-      # changes in each release.
-      home.stateVersion = "22.11";
 
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
@@ -88,7 +99,7 @@
             "nightthemeswitcher-gnome-shell-extension@rmnvgr.gitlab.com"
             "appindicatorsupport@rgcjonas.gmail.com"
           ];
-          "org/gnome/desktop/wm/preferences".num-workspaces = 1;
+          "org/gnome/desktop/wm/preferences".num-workspaces = 2;
           "org/gnome/desktop/wm/preferences".button-layout = "appmenu:minimize,maximize,close";
           "org/gnome/desktop/wm/keybindings" = {
             switch-applications = "@as []";
@@ -106,50 +117,116 @@
 
       home.packages = commonPackages ++ plateformSpecificPackages;
 
-      programs.fish.enable = true;
-      programs.fish.shellInit = builtins.readFile ./fish/shellInit.fish;
-      programs.fish.shellAliases = {
-        cls = "clear";
-        cat = "bat";
-        diff = "batdiff";
-        man = "batman";
-        nshell = "nix-shell -p";
-        "..." = "cd ../..";
-      };
+      # Some program config
+      programs = {
+        bat = {
+          enable = true;
+	  extraPackages = with pkgs.bat-extras; [ batdiff batman batgrep batwatch ];
+	};
 
-      programs.bat = { 
-        enable = true;
-        extraPackages = with pkgs.bat-extras; [ batdiff batman batgrep batwatch ];
-      };
+	direnv = {
+          enable = true;
+	  nix-direnv.enable = true;
+	};
+	
+	firefox.enable = true;
+	
+	fish = {
+	  enable = true;
+	  functions = {
+            gitignore = "curl -sL https://www.gitignore.io/api/$argv";
+	  };
+	  plugins = [];
+	  shellInit = builtins.readFile ./fish/shellInit.fish;
+	  shellAliases = {
+            cls = "clear";
+	    cat = "bat";
+	    diff = "batdiff";
+	    g = "git";
+	    gl = "git log";
+	    gc = "git commit -m";
+	    gca = "git commit -am";
+	    gws = "git status";
+	    ghauth = "git auth login";
+	    man = "batman";
+	    nshell = "nix-shell -p";
+	    ".." = "cd ..";
+	    "..." = "cd ../..";
+	  };
+	};
+	
+	fzf = {
+          enable = true;
+	  enableFishIntegration = true;
+	};
+	
+	gh = {
+          enable = true;
+	  settings = {
+            editor = "nvim";
+	    git_protocol = "ssh";
+	  };
+	};
+	
+	htop.enable = isNotWSL;
+	
+	jq.enable = true;
+	
+	kitty = {
+          enable = true;
+	  package = kitty;
+	  font = {
+            name = "FiraCode Nerd Font";
+	    size = 16;
+	  };
+	  settings = {
+            copy_on_select = true;
+	    enabled_layouts = "*";
+	    scollback_lines = 10000;
+	  };
+	};
+	
+	navi.enable = true;
+       
+        neovim = {
+          enable = true;
+          defaultEditor = true;
+          viAlias = true;
+          vimAlias = true;
+          # Config in ./neovim/*
+        };
 
-      programs.dircolors = {
-        enable = true;
-        enableFishIntegration = true;
-      };
 
-      programs.gh.enable = true;
-      programs.gh.enableGitCredentialHelper = true;
-      programs.gh.extensions = with pkgs; [ ];
-
-      programs.micro.enable = true;
-      programs.htop.enable = isNotWSL;
-      programs.navi.enable = true;
-      programs.tealdeer.enable = true;
-
-      programs.fzf = {
-        enable = true;
-        enableFishIntegration = true;
-      };
-
-      programs.kitty.enable = true;
-      programs.kitty.package = kitty;
-
-      programs.nnn.enable = true;
-      programs.nnn.package = pkgs.nnn.override ({ withNerdIcons = true; });
-      programs.nnn.extraPackages = with pkgs; [ ffmpegthumbnailer mediainfo sxiv ];
-
-      programs.firefox = {
-        enable = true;
+	nnn = {
+          enable = true;
+	  package = pkgs.nnn.override ({ withNerdIcons = true; });
+	  extraPackages = with pkgs; [ ffmpegthumbnailer mediainfo sxiv ];
+	};
+        
+	starship = {
+          enable = true;
+          settings = {
+            command_timeout = 1000;
+            character = {
+              success_symbol = " [λ](bold green)";
+              error_symbol = " [λ](bold red)";
+            };
+          };
+        };
+	
+	tealdeer.enable = true;
+	
+	vscode = {
+          enable = true;
+	  extensions = with pkgs.vscode-extensions; [
+            davidanson.vscode-markdownlint
+	  ];
+	  userSettings = {
+            editor.fontFamily = "FiraCode Nerd Font";
+	    editor.fontSize = 16;
+	    telemetry.enableTelemetry = false;
+	  };
+	};
       };
 
       services.mpris-proxy.enable = isNotWSL;
@@ -165,22 +242,7 @@
         "..." = "cd ../..";
       };
 
-      programs.neovim = {
-        enable = true;
-        defaultEditor = true;
-        viAlias = true;
-        vimAlias = true;
-        plugins = with pkgs.vimPlugins; [
-          nvim-treesitter.withAllGrammars
-        ];
-        extraConfig = ''
-          set number
-          set cc = 80
-          set list = true
-          set listchars = tab:→\ ,space:·,nbsp:␣,trail:•,eol:¶,precedes:«,extends:»
-        '';
-      };
-
+      
       programs.git = {
         enable = true;
         aliases = {

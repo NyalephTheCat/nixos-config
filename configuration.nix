@@ -13,40 +13,59 @@ let
   };
 in
 {
-  boot.loader.systemd-boot.enable = true;
-  boot.lanzaboote = {
-    enable = false;
-    pkiBundle = "/etc/secureboot";
+  # BOOTING
+  boot = {
+    loader = {
+      systemd-boot.enable = pkgs.lib.mkForce false;
+      efi = {
+        canTouchEfiVariables = true;
+	efiSysMountPoint = "/boot/efi";
+      };
+    };
+    kernelPackages = nixpkgs.linuxPackages_5_15;
+    bootspec.enable = true;
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/etc/secureboot";
+    };
   };
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.kernelPackages = nixpkgs.linuxPackages_5_15;
-  boot.bootspec.enable = true;
-  networking.hostName = "nyxos";
-  networking.networkmanager.enable = true;
 
-  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
+  # NETWORKING
+  networking = {
+    hostName = "nixos";
+    networkmanager.enable = true;
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
+  };
 
   time.timeZone = "Europe/Paris";
-
   i18n.defaultLocale = "fr_FR.utf8";
 
-  services.xserver.enable = true;
 
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
-  hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
-    modesetting.enable = true;
-    open = true;
+  # DISPLAY
+  services = {
+    xserver = {
+      enable = true;
+      displayManager = {
+        gdm.enable = true;
+      };
+      desktopManager = {
+        gnome.enable = true;
+      };
+      videoDrivers = [ "modesetting" "nvidia" ];
+      layout = "us";
+      xkbVariant = "";
+    };
   };
-  hardware.opengl.enable = true;
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+  hardware = {
+    nvidia = {
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
+      modesetting.enable = true;
+      open = true;
+    };
+    opengl.enable = true;
   };
-  programs.hyprland.enable = true;
+
+  programs.xwayland.enable = true;
 
   console.keyMap = "us";
 
