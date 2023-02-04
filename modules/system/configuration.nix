@@ -3,7 +3,6 @@
 {
   # Remove unecessary preinstalled packages
   environment.defaultPackages = [ ];
-  services.xserver.desktopManager.xterm.enable = false;
 
   programs.zsh.enable = true;
 
@@ -78,7 +77,7 @@
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot/efi";
     };
-    kernelPackages = nixpkgs.linuxPackages_5_15;
+    kernelPackages = pkgs.linuxPackages_5_15;
     bootspec.enable = true;
   };
 

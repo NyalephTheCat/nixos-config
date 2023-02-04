@@ -28,16 +28,17 @@
           system = system;
           modules = [
             { networking.hostname = hostname; }
+            lanzaboote.nixosModules.lanzaboote
             ./modules/system/configuration.nix
             # DO NOT USE MY HARDWARE CONFIG
-            ( ./. + "hosts/${hostname}/hardware-configuration.nix")
+            ( ./. + "/hosts/${hostname}/hardware-configuration.nix")
             home-manager.nixosModules.home-manager
             {
               home-manager = {
                 useUserPackages = true;
                 useGlobalPkgs = true;
                 extraSpecialArgs = { inherit inputs; };
-                user.chloe = (./. + "/hosts/${hostname}/user.nix");
+                users.chloe = (./. + "/hosts/${hostname}/user.nix");
               };
               nixpkgs.overlays = [
                 nur.overlay
@@ -48,7 +49,7 @@
         };
       in {
         nixosConfigurations = {
-          nyxos = mkSystem inputs.nixpkgs "x86_64-linux" "nyxos";
+          nixos = mkSystem inputs.nixpkgs "x86_64-linux" "nixos";
         };
       };
 }
