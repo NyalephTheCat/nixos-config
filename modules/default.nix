@@ -13,6 +13,7 @@
 
         # cli
         ./nvim
+        ./bat
         ./zsh
         ./git
         ./gpg

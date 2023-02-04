@@ -1,7 +1,7 @@
 { inputs, lib, config, pkgs, ... }:
 with lib;
 let
-    cfg = config.modules.eww;
+    cfg = config.modules.firefox;
 in {
     options.modules.firefox = { enable = mkEnableOption "firefox"; };
 

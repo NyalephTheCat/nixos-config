@@ -11,16 +11,34 @@ in {
     options.modules.packages = { enable = mkEnableOption "packages"; };
     config = mkIf cfg.enable {
     	home.packages = with pkgs; [
-            ripgrep ffmpeg tealdeer
-            exa htop fzf
-            pass gnupg bat
-            unzip lowdown zk
-            grim slurp slop
-            imagemagick age libnotify
-            git python3 lua zig 
-            mpv pqiv
-            screen bandw maintenance
-            wf-recorder anki-bin 
+            ripgrep 
+            ffmpeg 
+            tealdeer
+            exa 
+            htop 
+            fzf
+            pass 
+            gnupg
+            unzip 
+            lowdown 
+            zk
+            grim 
+            slurp 
+            slop
+            imagemagick 
+            age 
+            libnotify
+            git 
+            python3 
+            lua 
+            zig 
+            mpv 
+            pqiv
+            screen 
+            bandw 
+            maintenance
+            wf-recorder 
+            anki-bin 
         ];
     };
 }

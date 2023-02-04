@@ -1,6 +1,8 @@
 { pkgs, lib, config, ... }:
 with lib;
 let cfg = config.modules.zsh;
+in
+let bat_config = config.modules.bat;
 in {
     options.modules.zsh = { enable = mkEnableOption "zsh"; };
 
@@ -54,10 +56,15 @@ in {
                 rm = "rm -rifv";
                 mv = "mv -iv";
                 cp = "cp -riv";
-                cat = "bat --paging=never --style=plain";
+                cat = mkIf bat_config.enable "bat";
+                man = mkIf bat_config.enable "batman";
+                diff = mkIf bat_config.enable "batdiff";
+                grep = mkIf bat_config.enable "batgrep";
+                watch = mkIf bat_config.enable "batwatch";
                 ls = "exa -a --icons";
                 tree = "exa --tree --icons";
                 nd = "nix develop -c $SHELL";
+                ns = "nix-shell -p";
                 rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR --fast; notify-send 'Rebuild complete\!'";
             };
 
