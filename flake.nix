@@ -16,9 +16,17 @@
     };
 
     kittyNixpkgs.url = "github:NixOS/nixpkgs/c28f3f4bb3c1b7c723c1bf9e012704d89888aeff";
+
+    nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland"; };
+    nixpkgs-wayland.inputs.master.follows = "master";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { home-manager, nixpkgs, nur, lanzaboote, ... }@inputs:
+  outputs = { home-manager, hyprland, nixpkgs, nur, lanzaboote, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
@@ -29,6 +37,7 @@
           modules = [
             { networking.hostName = hostname; nixpkgs.config.allowUnfree = true; }
             lanzaboote.nixosModules.lanzaboote
+            hyprland.nixosModules.default
             ./modules/system/configuration.nix
             # DO NOT USE MY HARDWARE CONFIG
             ( ./. + "/hosts/${hostname}/hardware-configuration.nix")
