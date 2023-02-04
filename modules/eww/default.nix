@@ -14,7 +14,7 @@ in {
             eww-wayland
             pamixer
             brightnessctl
-            (nerdfonts.override { fonts = [ "Fira Code" ]; })
+            (nerdfonts.override { fonts = [ "FiraCode" ]; })
         ];
 
         # configuration
