@@ -27,7 +27,7 @@
         pkgs.lib.nixosSystem {
           system = system;
           modules = [
-            { networking.hostName = hostname; }
+            { networking.hostName = hostname; nixpkgs.config.allowUnfree = true; }
             lanzaboote.nixosModules.lanzaboote
             ./modules/system/configuration.nix
             # DO NOT USE MY HARDWARE CONFIG

@@ -18,7 +18,7 @@ in {
             grim slurp slop
             imagemagick age libnotify
             git python3 lua zig 
-            mpv firefox pqiv
+            mpv pqiv
             screen bandw maintenance
             wf-recorder anki-bin 
         ];

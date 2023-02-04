@@ -41,11 +41,6 @@
   xdg = {
     portal = {
       enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
-      gtkUsePortal = true;
     };
   };
 
@@ -83,7 +78,7 @@
 
   # Set up locales (timezone and keyboard layout)
   time.timeZone = "Europe/Paris";
-  i18n.defaultLocale = "en_UK.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
     keyMap = "fr";
