@@ -17,11 +17,8 @@
 
     kittyNixpkgs.url = "github:NixOS/nixpkgs/c28f3f4bb3c1b7c723c1bf9e012704d89888aeff";
 
-    nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland"; };
-    nixpkgs-wayland.inputs.master.follows = "master";
     hyprland = {
       url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };

@@ -12,7 +12,7 @@ in {
         wlsunset
         wl-clipboard
         hyprland
-	  ];
+      ];
 
       home.file.".config/hypr/hyprland.conf".source = ./hyprland.conf;
     };
