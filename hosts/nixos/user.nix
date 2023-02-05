@@ -5,6 +5,7 @@
     config.modules = {
         # gui
         firefox.enable = true;
+        kitty.enable = true;
         foot.enable = true;
         eww.enable = true;
         dunst.enable = true;
