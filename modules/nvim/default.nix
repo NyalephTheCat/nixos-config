@@ -23,19 +23,11 @@ in {
             sumneko-lua-language-server stylua # Lua
         ];
 
-        programs.zsh = {
-            initExtra = ''
-                export EDITOR="nvim"
-            '';
-
-            shellAliases = {
-                v = "nvim -i NONE";
-                nvim = "nvim -i NONE";
-            };
-        };
-
         programs.neovim = {
-            enable = true;
+          enable = true;
+          defaultEditor = true;
+          vimAlias = true;
+          viAlias = true;
             plugins = with pkgs.vimPlugins; [ 
                 vim-nix
                 plenary-nvim
@@ -78,7 +70,9 @@ in {
                     plugin = nvim-treesitter;
                     config = ''
                     lua << EOF
-                    require('nvim-treesitter.configs').setup {
+                      require('nvim-treesitter.configs').setup {
+                        ensure_installed = "all",
+                        auto_install = true,
                         highlight = {
                             enable = true,
                             additional_vim_regex_highlighting = false,
