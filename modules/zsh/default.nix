@@ -90,7 +90,7 @@ in
 	tree = "exa --tree --icons";
 	nd = "nix develop -c $SHELL";
 	ns = "nix-shell -p";
-	rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR; notify-send 'Rebuild complete\!'";
+	rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR";
       };
 
       # Source all plugins, nix-style

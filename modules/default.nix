@@ -12,5 +12,6 @@
     ./zsh
     ./gnome
     ./nvim
+    ./kitty
   ];
 }
