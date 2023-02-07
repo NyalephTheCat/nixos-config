@@ -25,10 +25,16 @@ in
   config = mkIf cfg.enable {
     home.packages = [
       pkgs.zsh
+      pkgs.exa
     ];
 
     programs.zsh = {
       enable = true;
+
+      oh-my-zsh = {
+        enable = true;
+	plugins = [ "git" "gh" ];
+      };
 
       # directory to put config files in
       dotDir = ".config/zsh";

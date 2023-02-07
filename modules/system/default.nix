@@ -58,6 +58,7 @@
   users.users.chloe = {
     isNormalUser = true;
     extraGroups = [ "input" "wheel" ];
+    shell = pkgs.zsh;
   };
 
   # Setup networking
@@ -68,6 +69,7 @@
     NIXOS_CONIG_DIR = "$HOME/.config/nixos";
     XDG_DATA_HOME = "$HOME/.local/share";
   };
+  environment.shells = with pkgs; [ zsh ];
 
   # Security
   security = {
