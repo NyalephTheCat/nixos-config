@@ -1,11 +1,10 @@
-{ pkg, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 with lib;
 let cfg = config.modules.discord;
 in
 {
   options.modules.discord = {
     enable = mkOption {
-      name = "discord";
       default = true;
       example = true;
       description = "Whether to enable discord.";

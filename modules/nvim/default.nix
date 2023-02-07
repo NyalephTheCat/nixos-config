@@ -31,13 +31,6 @@ in
       ];
 
       extraConfig = ''
-        set shell=/bin/sh
-        set laststatus=1
-        set suffixes+=.pdf
-        set diffopt+=algorithm:patience
-        set updatetime=500
-        set number=1
-        set relativenumber=1
       '';
     };
   };

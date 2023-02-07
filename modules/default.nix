@@ -8,6 +8,8 @@
 
     # The rest here
     ./firefox
+    ./discord
+    ./fish
     ./gnome
     ./nvim
   ];
