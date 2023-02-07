@@ -1,61 +1,47 @@
 {
-  description = "NixOS Configuration";
+  description = "Nyaleph's NixOS Configuration";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    lanzaboote.url = "github:nix-community/lanzaboote/65896e03fa64c5a430ced5a41c1cb403f0b6f090";
-    
+    lanzaboote.url = "github:nix-community/lanzaboote";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    kittyNixpkgs.url = "github:NixOS/nixpkgs/c28f3f4bb3c1b7c723c1bf9e012704d89888aeff";
-
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-    };
-
   };
 
-  outputs = { home-manager, hyprland, nixpkgs, nur, lanzaboote, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-      lib = nixpkgs.lib;
-      mkSystem = pkgs: system: hostname:
-        pkgs.lib.nixosSystem {
-          system = system;
-          modules = [
-            { networking.hostName = hostname; nixpkgs.config.allowUnfree = true; }
-            lanzaboote.nixosModules.lanzaboote
-            hyprland.nixosModules.default
-            ./modules/system/configuration.nix
-            # DO NOT USE MY HARDWARE CONFIG
-            ( ./. + "/hosts/${hostname}/hardware-configuration.nix")
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useUserPackages = true;
-                useGlobalPkgs = true;
-                extraSpecialArgs = { inherit inputs; };
-                users.chloe = (./. + "/hosts/${hostname}/user.nix");
-              };
-              nixpkgs.overlays = [
-                nur.overlay
-              ];
-            }
-          ];
-          specialArgs = { inherit inputs; };
-        };
-      in {
-        nixosConfigurations = {
-          nixos = mkSystem inputs.nixpkgs "x86_64-linux" "nixos";
-        };
+  outputs = { nixpkgs, lanzaboote, home-manager, ... }@inputs:
+  let
+    system = "x86_64-linux";
+    pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+    lib = nixpkgs.lib;
+    mkSystem = pkgs: system: hostname:
+      pkgs.lib.nixosSystem {
+        system = system;
+        modules = [
+          { networking.hostName = hostname; }
+          { nixpkgs.config.allowUnfree = true; }
+          lanzaboote.nixosModules.lanzaboote
+          home-manager.nixosModules.home-manager
+          ./modules/system
+          # Don't forget to create default.nix, and to copy your own hardawre-configuration.nix
+          (./. + "/hosts/${hostname}/hardware-configuration.nix")
+          {
+            home-manager = {
+              useUserPackages = true;
+              useGlobalPkgs = true;
+              extraSpecialArgs = { inherit inputs; };
+              users.chloe = (./. + "/hosts/${hostname}/user.nix");
+            };
+          }
+        ];
+        specialArgs = { inherit inputs; };
       };
+  in
+  {
+    nixosConfigurations = {
+      nox = mkSystem inputs.nixpkgs "x86_64-linux" "nox";
+    };
+  };
 }

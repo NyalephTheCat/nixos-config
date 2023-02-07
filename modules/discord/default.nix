@@ -1,12 +1,19 @@
-{ pkgs, lib, config, ... }:
+{ pkg, lib, config, ... }:
 with lib;
 let cfg = config.modules.discord;
-in {
-    options.modules.discord = { enable = mkEnableOption "discord"; };
-
-    config = mkIf cfg.enable {
-        home.packages = [
-            pkgs.discord
-        ];
+in
+{
+  options.modules.discord = {
+    enable = mkOption {
+      name = "discord";
+      default = true;
+      example = true;
+      description = "Whether to enable discord.";
+      type = types.bool;
     };
+  };
+
+  config = mkIf cfg.enable {
+    home.packages = [ pkgs.discord ];
+  };
 }
