@@ -9,7 +9,7 @@
     # The rest here
     ./firefox
     ./discord
-    ./fish
+    ./zsh
     ./gnome
     ./nvim
   ];
