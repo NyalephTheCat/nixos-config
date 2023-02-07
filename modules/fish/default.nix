@@ -26,7 +26,7 @@ in
         set fish_greeting
 	set -g fish_key_bindings fish_default_key_bindings
       '';
-      shellInit = builtins.readFile ./shellInit.fish;
+      shellInit = builtins.readFile ./shellinit.fish;
       plugins = with pkgs.fishPlugins; [
         { 
 	  name = "grc"; 
