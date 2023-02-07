@@ -15,6 +15,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       fish
+      oh-my-fish
       fzf
       grc
     ];
@@ -23,7 +24,7 @@ in
       enable = true;
       interactiveShellInit = ''
         set fish_greeting
-	set -g fish_key_bindings fist_default_key_bindings
+	set -g fish_key_bindings fish_default_key_bindings
       '';
       shellInit = builtins.readFile ./shellInit.fish;
       plugins = with pkgs.fishPlugins; [
