@@ -23,9 +23,17 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [
+    home.packages = with pkgs; [
       pkgs.zsh
       pkgs.exa
+    ] ++ optionals cfg.pretty [
+      bat
+      bat-extras.batman
+      bat-extras.batpipe
+      bat-extras.batgrep
+      bat-extras.batdiff
+      bat-extras.batwatch
+      bat-extras.prettybat
     ];
 
     programs.zsh = {
@@ -33,7 +41,10 @@ in
 
       oh-my-zsh = {
         enable = true;
-	plugins = [ "git" "gh" ];
+	plugins = [ 
+	  "git"
+	  "gh"
+	];
       };
 
       # directory to put config files in
@@ -79,7 +90,7 @@ in
 	tree = "exa --tree --icons";
 	nd = "nix develop -c $SHELL";
 	ns = "nix-shell -p";
-	rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR --fast; notify-send 'Rebuild complete\!'";
+	rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR; notify-send 'Rebuild complete\!'";
       };
 
       # Source all plugins, nix-style
