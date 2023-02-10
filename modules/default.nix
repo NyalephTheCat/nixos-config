@@ -14,5 +14,6 @@
     ./nvim
     ./kitty
     ./thunderbird
+    ./steam
   ];
 }
