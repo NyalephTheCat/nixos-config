@@ -15,7 +15,7 @@ in
 
   config = mkIf cfg.enable {
     home.sessionVariables.EDITOR = "nvim";
-    
+
     programs.neovim = {
       enable = true;
       defaultEditor = true;
@@ -68,7 +68,7 @@ in
 	  ));
 	  type = "lua";
 	  config = ''
-            require'nvim-treesitter.config'.setup {
+            require'nvim-treesitter.configs'.setup {
               highlight = {
                 enable = true,
 	      };
@@ -95,7 +95,7 @@ in
             vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
             vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
             vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-            
+
             local on_attach = function(_client, bufnr)
 	      vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 	      local bufopts = { noremap = true, silent = true, buffer = buffer, }
@@ -226,17 +226,53 @@ in
             let g:show_spaces_that_precede_tabs = 1
 	  '';
 	}
-        vim-gitgutter
+	{
+	  plugin = vim-gitgutter;
+	  config = ''
+            autocmd BufWritePost * GitGutter
+	    let g:gitgutter_highlight_liners = 1
+	    :set signcolumn=yes
+	    autocmd VimEnter * :hi :GitGutterLineNrHighlightsEnable
+	    autocmd VimEnter,Colorscheme * :hi GitGutterAddLine guibg=#002200
+	    autocmd VimEnter,Colorscheme * :hi GitGutterChangeLine guibg=#222200
+	    autocmd VimEnter,Colorscheme * :hi GitGutterDeleteLine guibg=#220000
+	    autocmd VimEnter,Colorscheme * :hi GitGutterChangeDeleteLine guibg=#220022
+	    nnoremap <silent> gl :GitGutterLineHighlightsToggle<CR>:IndentGuidesToggle<CR>
+	  '';
+	}
 	{
           plugin = vim-indent-guides;
 	  config = ''
-            let g:indent_guides_enable_on_vim_startup = 1
+	    let g:indent_guides_enable_on_vim_startup = 1
+	    let g:indent_guides_auto_colors = 0
+	    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd guibg=#000000
+	    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#0e0e0e
 	  '';
 	}
 
         # TODO configure plugins here
       ];
 
+      extraLuaConfig = ''
+	vim.g.mapleader = ','
+
+	vim.o.clipboard = 'unnamedplus'
+
+	vim.o.noswapfile = true
+
+	vim.o.wildignore = '*.o,*.obj,*.bin,*.git,*/__pycache__/*,/build/**,*.pyc'
+	vim.o.wildignorecase = true
+
+	vim.o.tabstop = 2
+	vim.o.softtabstop = 2
+	vim.o.shiftwidth = 2
+	vim.o.expandtab = true
+
+	vim.o.number = true
+	vim.o.relativenumber = true
+
+	vim.o.undofile = true
+      '';
     };
   };
 }

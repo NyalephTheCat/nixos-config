@@ -16,15 +16,18 @@ in
     programs.kitty = {
       enable = true;
       settings = literalExpression ''
-	scrollback_lines 10000
+        scrollback_lines 10000
 
-	enable_audio_bell false
+        sync_to_monitor no
+	disable_ligatures never
+
+	enable_audio_bell no
 	update_check_interval 0
 
-	window_margin_width 8
-	single_window_margin_width 8
+	map ctrl+shift+q noop
+	map ctrl+shift+w noop
 
-	disable_ligatures never
+	map ctrl+shift+p>n kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
 
 	tab_bar_edge bottom
 	tab_bar_style slant
