@@ -4,9 +4,9 @@ with lib;
 let cfg = config.modules.zsh;
 in
 let bat_config = config.modules.bat;
-in 
+in
 {
-  options.modules.zsh = { 
+  options.modules.zsh = {
     enable = mkOption {
      default = true;
      example = true;
@@ -39,24 +39,26 @@ in
     programs.zsh = {
       enable = true;
 
+      autocd = true;
+      dotDir = ".config/zsh";
+      enableCompletion = true;
+      enableAutosuggestions = true;
+      enableSyntaxHighlighting = true;
+
       oh-my-zsh = {
         enable = true;
 	plugins = [ 
 	  "git"
 	  "gh"
+	  "rust" # Add check to only use if needed
+	  "autopep8"
 	];
       };
 
-      # directory to put config files in
-      dotDir = ".config/zsh";
-
-      enableCompletion = true;
-      enableAutosuggestions = true;
-      enableSyntaxHighlighting = true;
-
       # .zshrc
       initExtra = ''
-        PROMPT="%F{blue}%m %~%b "$'\n'"%(?.%F{green}%Bλ%b |.%F{red}?) %f"
+      PROMPT="%F{blue}%n@%m %~%b "$'\n'"%(?.%F{green}%Bλ%b |.%F{red}?) %f"
+      RPROMPT="[%*]"
       '';
 
       # basically aliases for directories: 
@@ -72,6 +74,10 @@ in
         save = 1000;
 	size = 1000;
 	path = "$HOME/.cache/zsh_history";
+	ignoreDups = true;
+	ignoreSpace = true;
+	extended = true;
+	share = true;
       };
 
       # Set some aliases
