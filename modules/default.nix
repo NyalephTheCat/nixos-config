@@ -15,5 +15,6 @@
     ./kitty
     ./thunderbird
     ./steam
+    ./documents
   ];
 }
