@@ -13,5 +13,6 @@
     ./gnome
     ./nvim
     ./kitty
+    ./thunderbird
   ];
 }

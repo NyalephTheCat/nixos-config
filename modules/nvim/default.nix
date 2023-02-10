@@ -232,7 +232,6 @@ in
             autocmd BufWritePost * GitGutter
 	    let g:gitgutter_highlight_liners = 1
 	    :set signcolumn=yes
-	    autocmd VimEnter * :hi :GitGutterLineNrHighlightsEnable
 	    autocmd VimEnter,Colorscheme * :hi GitGutterAddLine guibg=#002200
 	    autocmd VimEnter,Colorscheme * :hi GitGutterChangeLine guibg=#222200
 	    autocmd VimEnter,Colorscheme * :hi GitGutterDeleteLine guibg=#220000
