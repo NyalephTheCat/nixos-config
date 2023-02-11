@@ -31,6 +31,7 @@ in
           "firefox.desktop"
 	  "org.gnome.Terminal.desktop"
 	  "discord.desktop"
+	  "kitty.desktop"
 	  "org.gnome.Nautilus.desktop"
 	];
 	disable-user-extensions = false;
@@ -38,11 +39,22 @@ in
           "user-theme@gnome-shell-extensions.gcampax.github.com"
 	  "trayIconsReloaded@selfmade.pl"
 	  "Vitals@CoreCoding.com"
-	  "dash-to-panel@jdevrose9.github.com"
+	  "dash-to-panel@jderose9.github.com"
 	  "sound-output-device-chooser@kgshank.net"
 	  "space-bar@luchrioh"
 	  "autohide-battery@sitnik.ru"
 	];
+      };
+      "org/gnome/shell/extensions/dash-to-panel" = {
+	 animate-appicon-hover = true;
+	 animate-appicon-hover-animation-extent = "{'RIPPLE':4,'PLANK':4,'SIMPLE':1}";
+	 appicon-margin = 8;
+	 appicon-padding = 4;
+	 dot-color-dominant = true;
+	 dot-style-focused = "SOLID";
+	 dot-style-unfocused = "METRO";
+	 focus-highlight-dominant = true;
+	 group-apps = true;
       };
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";

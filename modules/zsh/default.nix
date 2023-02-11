@@ -47,7 +47,8 @@ in
 
       oh-my-zsh = {
         enable = true;
-	plugins = [ 
+	plugins = [
+	  "command-not-found"
 	  "git"
 	  "gh"
 	  "rust" # Add check to only use if needed
@@ -61,7 +62,7 @@ in
       RPROMPT="[%*]"
       '';
 
-      # basically aliases for directories: 
+      # basically aliases for directories:
       # `cd ~dots` will cd into ~/.config/nixos
       dirHashes = {
         dots = "$HOME/.config/nixos";
@@ -100,7 +101,7 @@ in
       };
 
       # Source all plugins, nix-style
-      plugins = [
+      plugins = with pkgs; [
         {
 	  name = "auto-ls";
 	  src = pkgs.fetchFromGitHub {
