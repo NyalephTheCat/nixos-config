@@ -16,5 +16,6 @@
     ./thunderbird
     ./steam
     ./documents
+    ./rust
   ];
 }
