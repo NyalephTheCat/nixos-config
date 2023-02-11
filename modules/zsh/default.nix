@@ -36,6 +36,10 @@ in
       bat-extras.prettybat
     ];
 
+    programs.command-not-found = {
+      enable = true;
+    };
+
     programs.zsh = {
       enable = true;
 
