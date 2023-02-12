@@ -16,6 +16,8 @@ in
   config = mkIf cfg.enable {
     home.sessionVariables.EDITOR = "nvim";
 
+    home.packages = [ pkgs.rust-analyzer pkgs.gcc ];
+
     programs.neovim = {
       enable = true;
       defaultEditor = true;
@@ -44,7 +46,21 @@ in
       ];
 
       plugins = with pkgs.vimPlugins; [
-        # Fancy plugins
+	# Fancy plugins
+	{
+	  plugin = tokyonight-nvim;
+	  type = "lua";
+	  config = ''
+	    vim.o.background = "dark"
+
+	    require('tokyonight').setup({
+	      dim_inactive = true,
+	      comments = { italic = true },
+	    });
+
+	    vim.o.colorscheme = "tokyonight"
+	  '';
+	}
         {
 	  plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [
             dockerfile
@@ -149,12 +165,19 @@ in
 	cmp_luasnip
 	friendly-snippets
 	{
+	  plugin = crates-nvim;
+	  type = "lua";
+	  config = ''
+	    require('crates').setup()
+	  '';
+	}
+	{
           plugin = nvim-cmp;
 	  type = "lua";
 	  config = ''
 	    require('luasnip.loaders.from_vscode').lazy_load()
 
-	    vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+	    -- vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 	    local cmp = require('cmp')
 	    local luasnip = require('luasnip')
 	    local check_backspace = function()
@@ -163,15 +186,27 @@ in
 	    end
 
 	    cmp.setup {
-              completion = { autocomplete = false },
+	      view = {
+		entries = "custom",
+	      },
 	      snippet = {
                 expand = function(args)
 		  luasnip.lsp_expand(args.body)
 		end
 	      },
+	      mapping = cmp.mapping.preset.insert({
+		['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({
+		  behavior = cmp.SelectBehavior.Select
+		}), {'i', 's'}),
+		['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({
+		  behavior = cmp.SelectBehavior.Select
+		}), {'i', 's'}),
+		['<CR>'] = cmp.mapping.confirm({ select = true }),
+	      }),
 	      sources = cmp.config.sources({
                 { name = 'path' },
 		{ name = 'nvim_lsp' },
+		{ name = 'crates' },
 	      }, {
                 { name = 'luasnip' },
 		{ name = 'buffer' },
@@ -181,34 +216,6 @@ in
 		disallow_partial_matching = true,
 		disallow_prefix_matching = true,
 	      },
-	      mapping = {
-                ['<C-Space>'] = cmp.mapping.confirm({ select = false }),
-		['<C-Tab>'] = cmp.mapping.complete_common_string(),
-		['<Tab>'] = cmp.mapping(function(fallback)
-		  if cmp.visible() then
-		    if not cmp.complete_common_string() then
-		      cmp.select_next_item(select_opts)
-		    end
-		  elseif check_backspace() then
-		    fallback()
-		  elseif luasnip.expandable() then
-		    luasnip.expand()
-		  elseif luasnip.expand_or_locally_jumpable() then
-		    luasnip.expand_or_jump()
-		  else
-		    cmp.complete()
-		  end
-		end, {'i', 's'}),
-		['<S-Tab>'] = cmp.mapping(function(fallback)
-		  if cmp.visible() then
-		    cmp.select_prev_item(select_opts)
-		  elseif luasnip.locally_jumpable(-1) then
-		    luasnip.jump(-1)
-		  else
-		    fallback()
-		  end
-		end, {'i', 's'}),
-	      }
 	    }
 	  '';
 	}
@@ -229,23 +236,7 @@ in
 	{
 	  plugin = vim-gitgutter;
 	  config = ''
-            autocmd BufWritePost * GitGutter
-	    let g:gitgutter_highlight_liners = 1
 	    :set signcolumn=yes
-	    autocmd VimEnter,Colorscheme * :hi GitGutterAddLine guibg=#002200
-	    autocmd VimEnter,Colorscheme * :hi GitGutterChangeLine guibg=#222200
-	    autocmd VimEnter,Colorscheme * :hi GitGutterDeleteLine guibg=#220000
-	    autocmd VimEnter,Colorscheme * :hi GitGutterChangeDeleteLine guibg=#220022
-	    nnoremap <silent> gl :GitGutterLineHighlightsToggle<CR>:IndentGuidesToggle<CR>
-	  '';
-	}
-	{
-          plugin = vim-indent-guides;
-	  config = ''
-	    let g:indent_guides_enable_on_vim_startup = 1
-	    let g:indent_guides_auto_colors = 0
-	    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd guibg=#000000
-	    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#0e0e0e
 	  '';
 	}
 
