@@ -16,6 +16,6 @@
     ./thunderbird
     ./steam
     ./documents
-    ./rust
+    ./rust/default.nix
   ];
 }
