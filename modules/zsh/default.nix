@@ -100,7 +100,7 @@ in
 	ls = "exa -a --icons";
 	tree = "exa --tree --icons";
 	nd = "nix develop -c $SHELL";
-	ns = "nix-shell -p";
+	ns = "nix-shell --run zsh -p";
 	rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR";
       };
 
