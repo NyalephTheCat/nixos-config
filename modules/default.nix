@@ -18,5 +18,6 @@
     ./documents
     ./docker
     ./pass
+    ./obs
   ];
 }
