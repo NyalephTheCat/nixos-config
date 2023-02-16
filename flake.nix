@@ -5,13 +5,15 @@
 
     lanzaboote.url = "github:nix-community/lanzaboote";
 
+    rust-overlay.url = "github:oxalica/rust-overlay";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { nixpkgs, lanzaboote, home-manager, ... }@inputs:
+  outputs = { nixpkgs, lanzaboote, rust-overlay, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
     pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
@@ -25,6 +27,12 @@
           lanzaboote.nixosModules.lanzaboote
           home-manager.nixosModules.home-manager
           ./modules/system
+          ({ pkgs, ... }: {
+            nixpkgs.overlays = [ rust-overlay.overlays.default ];
+            environment.systemPackages = [
+              (pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
+            ];
+          })
           # Don't forget to create default.nix, and to copy your own hardawre-configuration.nix
           (./. + "/hosts/${hostname}/hardware-configuration.nix")
           {
