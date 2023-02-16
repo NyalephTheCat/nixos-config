@@ -17,5 +17,6 @@
     ./steam
     ./documents
     ./docker
+    ./pass
   ];
 }

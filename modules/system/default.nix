@@ -57,7 +57,7 @@
   # Setup the chloe user
   users.users.chloe = {
     isNormalUser = true;
-    extraGroups = [ "input" "wheel" ];
+    extraGroups = [ "input" "wheel" "docker" ];
     shell = pkgs.zsh;
   };
 
@@ -116,6 +116,8 @@
       driSupport = true;
     };
   };
+
+  virtualisation.docker.enable = true;
 
   system.stateVersion = "22.05";
 }
