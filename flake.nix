@@ -36,6 +36,7 @@
           # Don't forget to create default.nix, and to copy your own hardawre-configuration.nix
           (./. + "/hosts/${hostname}/hardware-configuration.nix")
           {
+            nixpkgs.overlays = [ (import ./overlays/electron.nix) ];
             home-manager = {
               useUserPackages = true;
               useGlobalPkgs = true;

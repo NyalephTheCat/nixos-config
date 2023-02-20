@@ -19,5 +19,6 @@
     ./docker
     ./pass
     ./obs
+    ./i3
   ];
 }
