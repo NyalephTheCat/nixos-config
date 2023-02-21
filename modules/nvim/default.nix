@@ -16,7 +16,10 @@ in
   config = mkIf cfg.enable {
     home.sessionVariables.EDITOR = "nvim";
 
-    home.packages = [ pkgs.rust-analyzer pkgs.gcc ];
+    home.packages = [
+      pkgs.rust-analyzer
+      pkgs.gcc
+    ];
 
     programs.neovim = {
       enable = true;
@@ -46,67 +49,89 @@ in
       ];
 
       plugins = with pkgs.vimPlugins; [
-	# Fancy plugins
+	neovim-sensible
 	{
-	  plugin = tokyonight-nvim;
+	  plugin = gruvbox-nvim;
 	  type = "lua";
 	  config = ''
-	    vim.o.background = "dark"
-
-	    require('tokyonight').setup({
-	      dim_inactive = true,
-	      comments = { italic = true },
-	    });
-
-	    vim.o.colorscheme = "tokyonight"
+	  vim.o.background = "dark"
+	  vim.cmd([[colorscheme gruvbox]])
 	  '';
 	}
         {
-	  plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [
+          plugin = which-key-nvim;
+          type = "lua";
+          config = ''
+          require("which-key")
+          '';
+        }
+        vim-fugitive
+        {
+          plugin = neo-tree-nvim;
+          type = "lua";
+          config = ''
+          require("neo-tree").setup {
+            close_if_last_window = true,
+            window = {
+              width = 20,
+            }
+          }
+          '';
+        }
+        vim-airline-themes
+        {
+          plugin = vim-airline;
+          config = ''
+            let g:airline_theme="base16_gruvbox_dark_hard"
+            let g:airline#extensions#tabline#enabled = 1
+            let g:airline#extensions#buffer_nr_show = 1
+            let g:airline#powerline_fonts = 1
+          '';
+        }
+        {
+          plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [
             dockerfile
-	    git_rebase
-	    help
-	    meson
-	    regex
-	    sql
-	    html
-	    markdown
-	    markdown_inline
-	    json
-	    json5
-	    toml
-	    yaml
-	  ] ++ optionals (withLang "bash") [ bash ]
-	    ++ optionals (withLang "c") [ c ]
-	    ++ optionals (withLang "nix") [ nix ]
-	    ++ optionals (withLang "python") [ python ]
-	    ++ optionals (withLang "rust") [ rust ]
-	  ));
-	  type = "lua";
-	  config = ''
+            git_rebase
+            help
+            meson
+            regex
+            sql
+            html
+            markdown
+            markdown_inline
+            json
+            json5
+            toml
+            yaml
+          ] ++ optionals (withLang "bash") [ bash ]
+            ++ optionals (withLang "c") [ c ]
+            ++ optionals (withLang "nix") [ nix ]
+            ++ optionals (withLang "python") [ python ]
+            ++ optionals (withLang "rust") [ rust ]
+          ));
+          type = "lua";
+          config = ''
             require'nvim-treesitter.configs'.setup {
               highlight = {
                 enable = true,
-	      };
-	    }
-	  '';
-	}
-
-	{
+              }
+            }
+          '';
+        }
+        {
           plugin = nvim-lspconfig;
-	  type = "lua";
-	  config = ''
+          type = "lua";
+          config = ''
             local lspconfig = require('lspconfig')
-	    local lsp_defaults = lspconfig.util.default_config
+            local lsp_defaults = lspconfig.util.default_config
 
-	    lsp_defaults.capabilities = vim.tbl_deep_extend(
+            lsp_defaults.capabilities = vim.tbl_deep_extend(
               'force',
-	      lsp_defaults.capabilities,
-	      require('cmp_nvim_lsp').default_capabilities()
-	    )
+              lsp_defaults.capabilities,
+              require('cmp_nvim_lsp').default_capabilities()
+            )
 
-	    local opts = { noremap = true, silent = true, }
-
+            local opts = { noremap = true, silent = true, }
             vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
             vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
             vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
@@ -147,20 +172,9 @@ in
 	  '' + optionalString (withLang "rust") ''
             lspconfig.rust_analyzer.setup { on_attach = on_attach }
 	  '';
-	}
-	{
-          plugin = lsp_signature-nvim;
-	  type = "lua";
-	  config = ''
-	    require'lsp_signature'.setup {
-              hint_prefix = "",
-	      hint_scheme = "LSPVirtual",
-	      floating_window = false,
-	    }
-	  '';
-	}
+        }
 
-	cmp-nvim-lsp
+        cmp-nvim-lsp
 	luasnip
 	cmp_luasnip
 	friendly-snippets
@@ -220,8 +234,42 @@ in
 	  '';
 	}
 
-        # Ugly vim9 plugins
-	vim-eunuch
+
+        {
+          plugin = which-key-nvim;
+          type = "lua";
+          config = ''
+            require("which-key").setup {
+              layout = {
+                height = { min = 4, max = 10 }
+              }
+            }
+          '';
+        }
+
+        {
+          plugin = markdown-preview-nvim;
+          config = ''
+            let g:mkpd_auto_start = 1
+            let g:mkpd_auto_close = 1
+          '';
+        }
+        {
+          plugin = tex-conceal-vim;
+          config = ''
+            set conceallevel=2
+          '';
+        }
+
+        {
+	  plugin = vimsence;
+	  config = ''
+	  let g:vimsence_small_text = 'NeoVim'
+          let g:vimsence_small_image = 'neovim'
+	  '';
+	}
+
+        vim-eunuch
 	vim-lastplace
 	vim-nix
 	vim-repeat
@@ -239,14 +287,11 @@ in
 	    :set signcolumn=yes
 	  '';
 	}
-
-        # TODO configure plugins here
       ];
-
       extraLuaConfig = ''
-	vim.g.mapleader = ','
+        vim.g.mapleader = ','
 
-	vim.o.clipboard = 'unnamedplus'
+        vim.o.clipboard = 'unnamedplus'
 
 	vim.o.noswapfile = true
 
@@ -260,6 +305,8 @@ in
 
 	vim.o.number = true
 	vim.o.relativenumber = true
+
+	vim.o.colorcolumn = 80
 
 	vim.o.undofile = true
       '';

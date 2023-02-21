@@ -13,6 +13,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.i3 ];
+    home.packages = [ pkgs.i3-gaps ];
   };
 }

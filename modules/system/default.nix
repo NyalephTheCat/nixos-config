@@ -100,16 +100,19 @@
       layout = "us";
       xkbVariant = "";
 
-      displayManager.gdm.enable = true;
+      displayManager.gdm = {
+        enable = true;
+        debug = true;
+      };
       desktopManager.gnome.enable = true;
     };
-    pipewire.enable = true;
   };
   hardware = {
     nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.beta;
       modesetting.enable = true;
       open = true;
+      powerManagement.enable = true;
     };
     bluetooth.enable = true;
     opengl = {
