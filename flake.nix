@@ -51,6 +51,7 @@
   {
     nixosConfigurations = {
       nox = mkSystem inputs.nixpkgs "x86_64-linux" "nox";
+      nixos = mkSystem inputs.nixpkgs "x86_64-linux" "nixos";
     };
   };
 }
