@@ -7,5 +7,6 @@
     ./communication.nix
     ./development
     ./security.nix
+    ./nvidia.nix
   ];
 }
