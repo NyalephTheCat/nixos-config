@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  imports = [ ./git.nix ./shell.nix ];
+  imports = [ ./git.nix ./shell.nix ./emacs ];
 }
