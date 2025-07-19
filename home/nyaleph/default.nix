@@ -1,18 +1,29 @@
-{ ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  imports = [
-    ./programs/git.nix
-    ./programs/shell.nix
-    ./programs/terminal.nix
-    ./programs/editor.nix
-  ];
+  imports = [ ./packages.nix ./programs ./services ];
 
   home = {
     username = "nyaleph";
     homeDirectory = "/home/nyaleph";
     stateVersion = "25.05";
+
+    sessionVariables = {
+      EDITOR = "nvim";
+      BROWSER = "firefox";
+      TERMINAL = "konsole";
+    };
   };
 
+  # Let Home Manager manage itself
   programs.home-manager.enable = true;
+
+  # Basic XDG configuration
+  xdg = {
+    enable = true;
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
+  };
 }

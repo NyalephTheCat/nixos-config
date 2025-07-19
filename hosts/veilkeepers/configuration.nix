@@ -40,26 +40,21 @@
 
   # Enable modules
   modules = {
-    desktop.plasma.enable = true;
-    gaming.enable = true;
-    communication.enable = true;
-    development = {
+    desktop = {
+      bluetooth.enable = true;
+      plasma.enable = true;
+      audio.enable = true;
+      fonts.enable = true;
+    };
+    development.enable = true;
+    gaming = {
       enable = true;
-      languages = {
+      steam = {
         enable = true;
-        nix.enable = true;
-        rust.enable = true;
-        go.enable = true;
-        python.enable = true;
-        javascript.enable = true;
+        gamescope = false; # Enable if you want Gamescope
       };
-      tools.enable = true;
-      containers.enable = true;
-      databases = {
-        enable = true;
-        postgresql.enable = true;
-        redis.enable = true;
-      };
+      gamemode = true;
+      mangohud = true;
     };
   };
 
@@ -83,12 +78,7 @@
   };
 
   # System packages
-  environment.systemPackages = with pkgs; [
-    vim
-    git
-    curl
-    wget
-  ];
+  environment.systemPackages = with pkgs; [ vim git curl wget ];
 
   system.stateVersion = "25.05";
 }

@@ -1,13 +1,25 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.git = {
     enable = true;
-    userName = "nyaleph";
-    userEmail = "chloe@magnier.dev";
+    userName = "Chloe Magnier"; # Replace with your actual name
+    userEmail = "chloe@magnier.dev"; # Replace with your email
+
     extraConfig = {
       init.defaultBranch = "main";
-      push.autoSetupRemote = true;
+      pull.rebase = true;
+      fetch.prune = true;
+      diff.colorMoved = "default";
+      merge.conflictstyle = "diff3";
+    };
+
+    aliases = {
+      st = "status";
+      co = "checkout";
+      br = "branch";
+      ci = "commit";
+      lg = "log --oneline --graph --decorate";
     };
   };
 }

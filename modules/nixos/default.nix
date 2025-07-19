@@ -1,12 +1,5 @@
 { ... }:
 
 {
-  imports = [
-    ./desktop
-    ./gaming.nix
-    ./communication.nix
-    ./development
-    ./security.nix
-    #    ./nvidia.nix
-  ];
+  imports = [ ./desktop ./development ./gaming ];
 }
