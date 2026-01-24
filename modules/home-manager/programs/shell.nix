@@ -111,7 +111,7 @@
       
       # Initialize fzf
       if command -v fzf > /dev/null; then
-        # source <(fzf --zsh)
+        source <(fzf --zsh)
       fi
     '';
   };
