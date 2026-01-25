@@ -7,7 +7,11 @@ let
 in
 {
   options.applications.steam = {
-    enable = mkEnableOption "Steam";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Steam.";
+    };
 
     package = mkOption {
       type = types.package;

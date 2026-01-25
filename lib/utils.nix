@@ -46,7 +46,11 @@ rec {
     in
     {
       options.applications.${name} = {
-        enable = mkEnableOption description;
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable ${description}.";
+        };
 
         package = mkOption packageOption;
 
@@ -86,7 +90,11 @@ rec {
     in
     {
       options.emulators.${name} = {
-        enable = mkEnableOption description;
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable ${description}.";
+        };
 
         package = mkOption packageOption;
 

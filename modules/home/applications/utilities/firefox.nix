@@ -7,7 +7,11 @@ let
 in
 {
   options.applications.firefox = {
-    enable = mkEnableOption "Firefox";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Firefox.";
+    };
 
     package = mkOption {
       type = types.package;

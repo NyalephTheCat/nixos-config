@@ -7,7 +7,11 @@ let
 in
 {
   options.applications.vscode = {
-    enable = mkEnableOption "VS Code";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable VS Code.";
+    };
 
     package = mkOption {
       type = types.package;

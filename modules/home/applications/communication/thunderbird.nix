@@ -7,7 +7,11 @@ let
 in
 {
   options.applications.thunderbird = {
-    enable = mkEnableOption "Thunderbird";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Thunderbird.";
+    };
 
     package = mkOption {
       type = types.package;

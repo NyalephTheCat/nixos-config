@@ -7,7 +7,11 @@ let
 in
 {
   options.applications.obs = {
-    enable = mkEnableOption "OBS Studio";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable OBS Studio.";
+    };
 
     package = mkOption {
       type = types.package;

@@ -7,7 +7,11 @@ let
 in
 {
   options.applications.cursor = {
-    enable = mkEnableOption "Cursor IDE";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Cursor IDE.";
+    };
 
     package = mkOption {
       type = types.nullOr types.package;

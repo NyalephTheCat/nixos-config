@@ -4,5 +4,6 @@
   { name = "krita"; defaultPackage = pkgs.krita; description = "Krita"; }
   { name = "audacity"; defaultPackage = pkgs.audacity; description = "Audacity"; }
   { name = "vlc"; defaultPackage = pkgs.vlc; description = "VLC"; }
+  { name = "openseeface"; defaultPackage = pkgs.openseeface; description = "OpenSeeFace"; }
 ]) { inherit config pkgs lib; }
 
