@@ -119,14 +119,16 @@ in
         "privacy.trackingprotection.fingerprinting.enabled" = true;
         "privacy.donottrackheader.enabled" = true;
         "privacy.donottrackheader.value" = 1;
-        "privacy.purge_trackers.enabled" = true;
+        "privacy.purge_trackers.enabled" = false;
         "privacy.purge_trackers.date_in_cookie_database" = 0;
 
         # Cookies & Data
-        "network.cookie.cookieBehavior" = 1; # 0=accept all, 1=accept from visited, 2=block all, 4=block third-party
-        "network.cookie.lifetimePolicy" = 2; # 0=accept normally, 2=accept for session
-        "network.cookie.thirdParty.sessionOnly" = true;
-        "browser.contentblocking.category" = "strict";
+        "network.cookie.cookieBehavior" = 0; # 0=accept all, 1=accept from visited, 2=block all, 4=block third-party
+        "network.cookie.lifetimePolicy" = 0; # 0=accept normally, 2=accept for session
+        "network.cookie.thirdParty.sessionOnly" = false;
+        "browser.contentblocking.category" = "standard";
+        "privacy.clearOnShutdown.cookies" = false;
+        "privacy.clearOnShutdown.offlineApps" = false;
 
         # Telemetry & Data Collection
         "toolkit.telemetry.enabled" = false;
@@ -172,6 +174,8 @@ in
         "browser.cache.disk.enable" = true;
         "browser.cache.memory.enable" = true;
         "browser.cache.offline.enable" = true;
+        "browser.cache.disk.capacity" = 0; # 0 = unlimited disk cache
+        "browser.cache.memory.capacity" = -1; # -1 = unlimited memory cache
 
         # UI & Appearance
         "browser.compactmode.show" = true;
@@ -277,7 +281,7 @@ in
           user_pref("privacy.resistFingerprinting", true);
           user_pref("privacy.resistFingerprinting.randomization.enabled", true);
           user_pref("privacy.resistFingerprinting.randomization.daily", true);
-          user_pref("privacy.resistFingerprinting.letterboxing", true);
+          user_pref("privacy.resistFingerprinting.letterboxing", false);
           user_pref("privacy.resistFingerprinting.pbmode", true);
         '' else "")
         + lib.optionalString (!cfg.privacy.webRTC) ''
