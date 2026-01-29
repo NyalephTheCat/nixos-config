@@ -143,6 +143,14 @@ in
         description = "Enable audit daemon for security auditing.";
       };
     };
+
+    sudo = {
+      pwfeedback = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Show asterisks when typing the password in sudo (visual feedback).";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -173,18 +181,23 @@ in
       '';
     };
 
-    # Security hardening
-    security = mkIf cfg.hardening.enable {
-      # AppArmor
-      apparmor = mkIf cfg.hardening.enableAppArmor {
-        enable = true;
-        packages = [ pkgs.apparmor-utils ];
-      };
+    # Security hardening and sudo (merged to avoid defining security twice)
+    security = mkMerge [
+      (mkIf cfg.hardening.enable {
+        # AppArmor
+        apparmor = mkIf cfg.hardening.enableAppArmor {
+          enable = true;
+          packages = [ pkgs.apparmor-utils ];
+        };
 
-      # Kernel hardening
-      protectKernelImage = cfg.hardening.enableKernelHardening;
-      lockKernelModules = cfg.hardening.enableKernelHardening;
-    };
+        # Kernel hardening
+        protectKernelImage = cfg.hardening.enableKernelHardening;
+        lockKernelModules = cfg.hardening.enableKernelHardening;
+      })
+      (mkIf cfg.sudo.pwfeedback {
+        sudo.extraConfig = "Defaults pwfeedback";
+      })
+    ];
 
     # Audit daemon
     # Note: auditd is not available as a NixOS service by default
