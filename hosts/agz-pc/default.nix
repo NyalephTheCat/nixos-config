@@ -65,6 +65,12 @@
     shell = pkgs.zsh;
   };
 
+  # Auto-login for agz-cadentis (no password at login screen)
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "agz-cadentis";
+  };
+
   # Home Manager configuration
   home-manager = {
     useGlobalPkgs = true;
