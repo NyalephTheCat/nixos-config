@@ -27,5 +27,8 @@
   # Enable bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
+
+  # KDE Connect - connect phone to desktop (opens firewall ports 1714-1764)
+  programs.kdeconnect.enable = true;
 }
 
