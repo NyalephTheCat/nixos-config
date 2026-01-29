@@ -6,6 +6,15 @@
     ../../modules/system/plasma6.nix
     ../../modules/system/amd-drivers.nix
     ../../modules/system/basic-apps.nix
+    # Optional: Uncomment to enable
+    ../../modules/system/security.nix
+    ../../modules/system/ssh.nix
+    ../../modules/system/printing.nix
+    ../../modules/system/monitoring.nix
+    ../../modules/system/services.nix
+    ../../modules/system/network.nix
+    ../../modules/system/nix-settings.nix
+    ../../modules/system/fonts.nix
   ];
 
   # System configuration

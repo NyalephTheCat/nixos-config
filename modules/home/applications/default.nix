@@ -10,6 +10,9 @@ with lib;
     ./media
     ./productivity
     ./utilities
+    ./security
+    ./system
+    ./network
   ];
 }
 

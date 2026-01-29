@@ -507,4 +507,179 @@ rec {
   */
   toIdentifier = str:
     lib.stringAsChars (c: if lib.isAlphaNum c || c == "_" then c else "_") str;
+
+  # ============================================================================
+  # Program Module Helpers
+  # ============================================================================
+
+  /**
+    Create a simple program module with standard options.
+    
+    Example:
+      mkProgramModule {
+        name = "bat";
+        defaultPackage = pkgs.bat;
+        description = "Bat (cat replacement)";
+        extraOptions = { theme = mkOption { ... }; };
+      }
+  */
+  mkProgramModule = { name, defaultPackage, description, packageName ? name, packageExample ? null, extraOptions ? {}, extraConfig ? {} }:
+    { config, pkgs, lib, ... }:
+    with lib;
+    let
+      packageOption = {
+        type = types.package;
+        default = defaultPackage;
+        defaultText = literalExpression "pkgs.${packageName}";
+        description = "The ${description} package to use.";
+      } // (if packageExample != null then { example = literalExpression packageExample; } else {});
+    in
+    {
+      options.programs.${name} = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable ${description}.";
+        };
+
+        package = mkOption packageOption;
+
+        extraPackages = mkOption {
+          type = types.listOf types.package;
+          default = [];
+          description = "Additional packages to install alongside ${description}.";
+        };
+
+        extraConfig = mkOption {
+          type = types.lines;
+          default = "";
+          description = "Extra ${description} configuration.";
+        };
+      } // extraOptions;
+
+      config = mkIf config.programs.${name}.enable {
+        programs.${name} = {
+          enable = true;
+          package = config.programs.${name}.package;
+        } // extraConfig;
+        home.packages = config.programs.${name}.extraPackages;
+      };
+    };
+
+  /**
+    Create a service module helper.
+    
+    Example:
+      mkServiceModule {
+        name = "syncthing";
+        description = "Syncthing file synchronization";
+        serviceConfig = { ... };
+      }
+  */
+  mkServiceModule = { name, description, serviceConfig, unitConfig ? {}, installConfig ? {} }:
+    { config, pkgs, lib, ... }:
+    with lib;
+    {
+      options.services.${name} = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable ${description} service.";
+        };
+      };
+
+      config = mkIf config.services.${name}.enable {
+        systemd.user.services.${name} = {
+          Unit = unitConfig;
+          Service = serviceConfig;
+          Install = installConfig;
+        };
+      };
+    };
+
+  /**
+    Create a theme-based module helper.
+    
+    Example:
+      mkThemeModule {
+        name = "alacritty";
+        themes = [ "catppuccin" "dracula" ];
+        defaultTheme = "catppuccin";
+      }
+  */
+  mkThemeModule = { name, themes, defaultTheme ? null }:
+    { config, pkgs, lib, ... }:
+    with lib;
+    {
+      options.${name}.theme = mkOption {
+        type = types.nullOr (types.enum themes);
+        default = defaultTheme;
+        description = "Theme to use for ${name}.";
+      };
+    };
+
+  # ============================================================================
+  # Font Management Utilities
+  # ============================================================================
+
+  /**
+    Get a Nerd Font package with specified fonts.
+    
+    Example:
+      getNerdFont [ "FiraCode" "Hack" ] pkgs
+  */
+  getNerdFont = fonts: pkgs.nerdfonts.override { inherit fonts; };
+
+  /**
+    Get a list of common system fonts.
+    
+    Example:
+      getSystemFonts pkgs
+  */
+  getSystemFonts = pkgs: with pkgs; [
+    dejavu_fonts
+    liberation_ttf
+    noto-fonts
+    noto-fonts-emoji
+  ];
+
+  # ============================================================================
+  # Service Management Utilities
+  # ============================================================================
+
+  /**
+    Create a systemd user service configuration.
+    
+    Example:
+      mkUserService {
+        name = "my-service";
+        serviceConfig = {
+          ExecStart = "${pkgs.my-package}/bin/my-service";
+        };
+      }
+  */
+  mkUserService = { name, serviceConfig, unitConfig ? {}, installConfig ? { WantedBy = [ "default.target" ]; } }:
+    {
+      Unit = unitConfig;
+      Service = serviceConfig;
+      Install = installConfig;
+    };
+
+  /**
+    Create a systemd timer configuration.
+    
+    Example:
+      mkUserTimer {
+        name = "my-timer";
+        onCalendar = "daily";
+        serviceConfig = { ... };
+      }
+  */
+  mkUserTimer = { name, onCalendar, serviceConfig, unitConfig ? {}, timerConfig ? {} }:
+    {
+      Unit = unitConfig;
+      Service = serviceConfig;
+      Timer = timerConfig // { OnCalendar = onCalendar; };
+      Install = { WantedBy = [ "timers.target" ]; };
+    };
 }

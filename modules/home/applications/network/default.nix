@@ -5,9 +5,5 @@ with lib;
 {
   imports = [
     ./simple.nix
-    ./vscode.nix
-    ./cursor.nix
-    ./rust.nix
   ];
 }
-

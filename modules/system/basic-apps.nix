@@ -1,41 +1,109 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
+with lib;
+
+let
+  cfg = config.system.basicApps;
+in
 {
-  # Essential system packages
-  environment.systemPackages = with pkgs; [
-    # File management
-    # Note: dolphin and ark are KDE applications - they're included with Plasma6 by default
-    # If you need them as separate packages, uncomment and adjust:
-    # (if pkgs ? libsForQt6 && pkgs.libsForQt6 ? dolphin then pkgs.libsForQt6.dolphin else if pkgs ? libsForQt5 && pkgs.libsForQt5 ? dolphin then pkgs.libsForQt5.dolphin else null)
-    # (if pkgs ? libsForQt6 && pkgs.libsForQt6 ? ark then pkgs.libsForQt6.ark else if pkgs ? libsForQt5 && pkgs.libsForQt5 ? ark then pkgs.libsForQt5.ark else null)
-    file
-    
-    # Text editors
-    nano
-    vim
-    
-    # System utilities
-    htop
-    neofetch
-    git
-    wget
-    curl
-    
-    # Archive tools
-    unzip
-    zip
-    
-    # Network tools
-    networkmanagerapplet
-  ];
+  options.system.basicApps = {
+    enable = mkEnableOption "basic system applications";
 
-  # Enable network manager
-  networking.networkmanager.enable = true;
+    fileManagement = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Install file management utilities.";
+      };
 
-  # Enable automatic system upgrades
-  system.autoUpgrade = {
-    enable = false; # Set to true if desired
-    allowReboot = false;
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [ file ];
+        description = "File management packages.";
+      };
+    };
+
+    textEditors = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Install text editors.";
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [ nano vim ];
+        description = "Text editor packages.";
+      };
+    };
+
+    systemUtilities = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Install system utilities.";
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [ htop neofetch git wget curl ];
+        description = "System utility packages.";
+      };
+    };
+
+    archiveTools = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Install archive tools.";
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [ unzip zip ];
+        description = "Archive tool packages.";
+      };
+    };
+
+    networkTools = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Install network tools.";
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [ networkmanagerapplet ];
+        description = "Network tool packages.";
+      };
+    };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = "Additional system packages.";
+    };
+  };
+
+  config = mkIf cfg.enable {
+    # Essential system packages
+    environment.systemPackages = 
+      (if cfg.fileManagement.enable then cfg.fileManagement.packages else [])
+      ++ (if cfg.textEditors.enable then cfg.textEditors.packages else [])
+      ++ (if cfg.systemUtilities.enable then cfg.systemUtilities.packages else [])
+      ++ (if cfg.archiveTools.enable then cfg.archiveTools.packages else [])
+      ++ (if cfg.networkTools.enable then cfg.networkTools.packages else [])
+      ++ cfg.extraPackages;
+
+    # Enable network manager
+    networking.networkmanager.enable = true;
+
+    # Enable automatic system upgrades
+    system.autoUpgrade = {
+      enable = false; # Set to true if desired
+      allowReboot = false;
+    };
   };
 }
 
