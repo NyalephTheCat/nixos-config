@@ -45,7 +45,7 @@ with lib;
   # Git configuration
   tools.git = {
     enable = true;
-    userName = "chloe magnier";
+    userName = "Chloe Magnier";
     userEmail = "chloe@magnier.dev";
   };
 }

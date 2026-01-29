@@ -19,6 +19,12 @@
 
   # System configuration
   system.stateVersion = "25.11";
+
+  # Bootloader configuration
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
   
   # Hostname
   networking.hostName = "agz-pc";
@@ -47,6 +53,9 @@
       variant = "abnt2";
     };
   };
+
+  # Enable zsh at system level (required when user shell is zsh)
+  programs.zsh.enable = true;
 
   # Users
   users.users.agz-cadentis = {

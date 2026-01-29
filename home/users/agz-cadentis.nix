@@ -41,5 +41,12 @@ with lib;
     ColorScheme=Breeze Dark
     Name=Breeze Dark
   '';
+
+  # Git configuration
+  tools.git = {
+    enable = true;
+    userName = "MadLadyPercent";
+    userEmail = "agata.calliw@outlook.com";
+  };
 }
 
