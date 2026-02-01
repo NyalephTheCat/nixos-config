@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./hardware.nix
+    ./hardware-configuration.nix
     ../../modules/system/plasma6.nix
     ../../modules/system/amd-drivers.nix
     ../../modules/system/basic-apps.nix
@@ -63,6 +63,7 @@
     description = "agz-cadentis";
     extraGroups = [ "networkmanager" "wheel" "audio" "video" "docker" ];
     shell = pkgs.zsh;
+    hashedPassword = "$6$0KtUjIG0mGeXXJvp$8vF7na6NGeNIfCnX1lNDsfwl0ilv.yAMDH2UnJ3lILcKfcg9vQtIdDCSfb.7DXtBhCohZIrcmkzCiHqT6ytnK0";
   };
 
   # Auto-login for agz-cadentis (no password at login screen)
